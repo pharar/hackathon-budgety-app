@@ -1,4 +1,54 @@
 /*
+    SpeechRecognitionController
+*/
+const speechRecognitionController = (function () {
+
+    function init() {
+
+        try {
+            window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        } catch (e) {
+            console.log(`Speech Recognition not supported: ${e}`);
+        }
+
+        const recognition = new SpeechRecognition();
+        recognition.interimResults = true;
+
+        recognition.addEventListener('result', recognizeCmds);
+        recognition.addEventListener('end', recognition.start);
+
+        recognition.start();
+    }
+
+    function recognizeCmds(e) {
+        const transcript = Array.from(e.results)
+            .map(result => result[0])
+            .map(result => result.transcript)
+            .join('');
+
+        if (e.results[0].isFinal) {
+            if (transcript.includes('income')) {
+                event = new CustomEvent('speechRecognize',
+                    {
+                        detail: transcript.split(' ')
+                    });
+                document.dispatchEvent(event);
+            }
+
+            if (transcript.includes('expense')) {
+                console.log(transcript.split(' '));
+            }
+
+        }
+
+    }
+
+    return {
+        init,
+    }
+})();
+
+/*
  Local Storage Controller
 */
 const localStorageController = (function () {
@@ -390,7 +440,7 @@ var UIController = (function () {
 
 
 // GLOBAL APP CONTROLLER
-var controller = (function (budgetCtrl, UICtrl, localStorageCtrl) {
+var controller = (function (budgetCtrl, UICtrl, localStorageCtrl, speechRecognitionCtrl) {
 
     var setupEventListeners = function () {
         var DOM = UICtrl.getDOMstrings();
@@ -406,6 +456,9 @@ var controller = (function (budgetCtrl, UICtrl, localStorageCtrl) {
         document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
 
         document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changedType);
+
+        // Event listener for the custom event listener speechRecognize
+        document.addEventListener('speechRecognize', speechReconHandler);
     };
 
 
@@ -433,6 +486,16 @@ var controller = (function (budgetCtrl, UICtrl, localStorageCtrl) {
         // 3. Update the UI with the new percentages
         UICtrl.displayPercentages(percentages);
     };
+
+    const speechReconHandler = function (e) {
+
+        let [type, description, value] = e.detail;
+
+        const newItem = budgetCtrl.addItem('inc', description, parseInt(value));
+        UICtrl.addListItem(newItem, 'inc');
+        updateBudget();
+        updatePercentages();
+    }
 
     /* 
     saveDataToLS - Function created to call the localStorageController
@@ -535,10 +598,11 @@ var controller = (function (budgetCtrl, UICtrl, localStorageCtrl) {
             });
             loadDatafromLS();
             setupEventListeners();
+            speechRecognitionCtrl.init();
         }
     };
 
-})(budgetController, UIController, localStorageController);
+})(budgetController, UIController, localStorageController, speechRecognitionController);
 
 
 controller.init();

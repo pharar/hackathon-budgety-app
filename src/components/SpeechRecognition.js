@@ -38,9 +38,7 @@ function recognizeCmds(e) {
   if (e.results[0].isFinal) {
     if (transcript.includes('income')) {
       custemEventHandler('inc', transcript);
-    }
-
-    if (transcript.includes('expense')) {
+    } else if (transcript.includes('expense')) {
       custemEventHandler('exp', transcript);
     }
   }

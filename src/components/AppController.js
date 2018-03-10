@@ -49,6 +49,21 @@ function updatePercentages() {
   UICtrl.displayPercentages(percentages);
 }
 
+function updateAndSaveData() {
+  // 1. Calculate and update budget
+  updateBudget();
+
+  // 2. Calculate and update percentages
+  updatePercentages();
+
+  // 3. Persist data in localStorage
+  saveDataToLS();
+}
+
+/* 
+		speechReconHandler - Receive the data from Speech Recognition controller
+		and added to the UI and local storage
+*/
 function speechReconHandler(e) {
   let description;
   const { type, transcript } = e.detail;
@@ -75,14 +90,13 @@ function speechReconHandler(e) {
 
   const newItem = budgetCtrl.addItem(type, description.join(' '), value);
   UICtrl.addListItem(newItem, type);
-  updateBudget();
-  updatePercentages();
+  updateAndSaveData();
 }
 
 /* 
     saveDataToLS - Function created to call the localStorageController
     to persist the data.
-    */
+*/
 function saveDataToLS() {
   const data = budgetCtrl.getData();
   localStorageCtrl.persistData(data);
@@ -90,7 +104,7 @@ function saveDataToLS() {
 
 /*
     Load data from Local Storage and show in the UI
-    */
+*/
 function loadDatafromLS() {
   const data = localStorageCtrl.loadData();
 
@@ -126,14 +140,8 @@ function ctrlAddItem() {
     // 4. Clear the fields
     UICtrl.clearFields();
 
-    // 5. Calculate and update budget
-    updateBudget();
-
-    // 6. Calculate and update percentages
-    updatePercentages();
-
-    // 7. Persist data in localStorage
-    saveDataToLS();
+    // 5. Update and Save data
+    updateAndSaveData();
   }
 }
 
@@ -148,7 +156,7 @@ function ctrlDeleteItem(event) {
     return el;
   }
 
-  itemDelete = findParent(event.target, 'item__delete');
+  let itemDelete = findParent(event.target, 'item__delete');
   if (itemDelete) itemID = itemDelete.parentNode.parentNode.id;
 
   if (itemID) {
@@ -163,14 +171,8 @@ function ctrlDeleteItem(event) {
     // 2. Delete the item from the UI
     UICtrl.deleteListItem(itemID);
 
-    // 3. Update and show the new budget
-    updateBudget();
-
-    // 4. Calculate and update percentages
-    updatePercentages();
-
-    // 5. Persist the data in the local storage
-    saveDataToLS();
+    // 3. Update and save data
+    updateAndSaveData();
   }
 }
 

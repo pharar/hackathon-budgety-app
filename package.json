@@ -1,0 +1,26 @@
+{
+  "name": "budget-hackathon-pallet",
+  "version": "1.0.0",
+  "description":
+    "App for budget controller original from a Udemy course and used for hackathons",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "parcel src/index.html --out-dir public/",
+    "build": "parcel build src/index.html --out-dir dist/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/20Heroes/hackathon-budgetapp.git"
+  },
+  "keywords": ["Budget", "hackathon", "javascript", "node"],
+  "author": "Guilherme Scaldelai",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/20Heroes/hackathon-budgetapp/issues"
+  },
+  "homepage": "https://github.com/20Heroes/hackathon-budgetapp#readme",
+  "devDependencies": {
+    "parcel-bundler": "^1.6.2"
+  }
+}

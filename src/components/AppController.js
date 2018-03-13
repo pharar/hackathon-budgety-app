@@ -110,18 +110,19 @@ function loadDatafromLS() {
 
   if (!data) return;
 
-  data.allItems.inc.forEach(item => {
-    const newItem = budgetCtrl.addItem('inc', item.description, item.value);
-    UICtrl.addListItem(newItem, 'inc');
-  });
+  function addNewItem(type) {
+    data.allItems[type].forEach(item => {
+      const newItem = budgetCtrl.addItem(type, item.description, item.value);
+      UICtrl.addListItem(newItem, type);
+    });
+  }
 
-  data.allItems.exp.forEach(item => {
-    const newItem = budgetCtrl.addItem('exp', item.description, item.value);
-    UICtrl.addListItem(newItem, 'exp');
-  });
+  for (let key in data.allItems) {
+    addNewItem(key);
+  }
 
   updateBudget();
-  updatePercentages();
+  // updatePercentages();
 }
 
 function ctrlAddItem() {

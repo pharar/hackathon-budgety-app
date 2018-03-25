@@ -1,15 +1,15 @@
-import * as budgetCtrl from './BudgetController';
-import * as UICtrl from './UIController';
-import * as localStorageCtrl from './LocalStorage';
-import initSpeechRecognitionCtrl from './SpeechRecognition';
+import * as budgetCtrl from "./BudgetController";
+import * as UICtrl from "./UIController";
+import * as localStorageCtrl from "./LocalStorage";
+import initSpeechRecognitionCtrl from "./SpeechRecognition";
 
 // GLOBAL APP CONTROLLER
 function setupEventListeners() {
-  var DOM = UICtrl.getDOMstrings();
+  let DOM = UICtrl.getDOMstrings();
 
-  document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
+  document.querySelector(DOM.inputBtn).addEventListener("click", ctrlAddItem);
 
-  document.addEventListener('keypress', function(event) {
+  document.addEventListener("keypress", event => {
     if (event.keyCode === 13 || event.which === 13) {
       ctrlAddItem();
     }
@@ -17,14 +17,14 @@ function setupEventListeners() {
 
   document
     .querySelector(DOM.container)
-    .addEventListener('click', ctrlDeleteItem);
+    .addEventListener("click", ctrlDeleteItem);
 
   document
     .querySelector(DOM.inputType)
-    .addEventListener('change', UICtrl.changedType);
+    .addEventListener("change", UICtrl.changedType);
 
   // Event listener for the custom event listener speechRecognize
-  document.addEventListener('speechRecognize', speechReconHandler);
+  document.addEventListener("speechRecognize", speechReconHandler);
 }
 
 function updateBudget() {
@@ -32,7 +32,7 @@ function updateBudget() {
   budgetCtrl.calculateBudget();
 
   // 2. Return the budget
-  var budget = budgetCtrl.getBudget();
+  let budget = budgetCtrl.getBudget();
 
   // 3. Display the budget on the UI
   UICtrl.displayBudget(budget);
@@ -43,7 +43,7 @@ function updatePercentages() {
   budgetCtrl.calculatePercentages();
 
   // 2. Read percentages from the budget controller
-  var percentages = budgetCtrl.getPercentages();
+  let percentages = budgetCtrl.getPercentages();
 
   // 3. Update the UI with the new percentages
   UICtrl.displayPercentages(percentages);
@@ -69,10 +69,10 @@ function speechReconHandler(e) {
   const { type, transcript } = e.detail;
 
   console.log(transcript);
-  if (type === 'inc') {
-    description = transcript.slice(transcript.indexOf('income') + 1);
-  } else if (type === 'exp') {
-    description = transcript.slice(transcript.indexOf('expense') + 1);
+  if (type === "inc") {
+    description = transcript.slice(transcript.indexOf("income") + 1);
+  } else if (type === "exp") {
+    description = transcript.slice(transcript.indexOf("expense") + 1);
   }
 
   if (description.length <= 1) {
@@ -88,7 +88,7 @@ function speechReconHandler(e) {
 
   description.pop();
 
-  const newItem = budgetCtrl.addItem(type, description.join(' '), value);
+  const newItem = budgetCtrl.addItem(type, description.join(" "), value);
   UICtrl.addListItem(newItem, type);
   updateAndSaveData();
 }
@@ -117,7 +117,7 @@ function loadDatafromLS() {
     });
   }
 
-  for (let key in data.allItems) {
+  for (const key in data.allItems) {
     addNewItem(key);
   }
 
@@ -126,12 +126,12 @@ function loadDatafromLS() {
 }
 
 function ctrlAddItem() {
-  var input, newItem;
+  let input, newItem;
 
   // 1. Get the field input data
   input = UICtrl.getInput();
 
-  if (input.description !== '' && !isNaN(input.value) && input.value > 0) {
+  if (input.description !== "" && !isNaN(input.value) && input.value > 0) {
     // 2. Add the item to the budget controller
     newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
@@ -147,7 +147,7 @@ function ctrlAddItem() {
 }
 
 function ctrlDeleteItem(event) {
-  var itemID, splitID, type, ID;
+  let itemID, splitID, type, ID;
 
   /*
             Fix for work in FireFox
@@ -157,12 +157,12 @@ function ctrlDeleteItem(event) {
     return el;
   }
 
-  let itemDelete = findParent(event.target, 'item__delete');
+  const itemDelete = findParent(event.target, "item__delete");
   if (itemDelete) itemID = itemDelete.parentNode.parentNode.id;
 
   if (itemID) {
-    //inc-1
-    splitID = itemID.split('-');
+    // inc-1
+    splitID = itemID.split("-");
     type = splitID[0];
     ID = parseInt(splitID[1]);
 
@@ -178,13 +178,13 @@ function ctrlDeleteItem(event) {
 }
 
 export default function init() {
-  console.log('Application has started.');
+  console.log("Application has started.");
   UICtrl.displayMonth();
   UICtrl.displayBudget({
     budget: 0,
     totalInc: 0,
     totalExp: 0,
-    percentage: -1,
+    percentage: -1
   });
   loadDatafromLS();
   setupEventListeners();

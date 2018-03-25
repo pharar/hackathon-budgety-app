@@ -7,7 +7,8 @@
         "singleQuote": true,
         "trailingComma": "all"
       }
-    ]
+    ],
+    "radix": 0
   },
   "env": {
     "es6": true,

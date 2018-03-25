@@ -11,7 +11,7 @@
     "build": "parcel build src/index.html --out-dir dist/"
   },
   "lint-staged": {
-    "src/**/*.js": ["prettier --write", "git add"]
+    "src/**/*.js": ["eslint", "git add"]
   },
   "repository": {
     "type": "git",

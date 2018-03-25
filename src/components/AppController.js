@@ -3,36 +3,12 @@ import * as UICtrl from './UIController';
 import * as localStorageCtrl from './LocalStorage';
 import initSpeechRecognitionCtrl from './SpeechRecognition';
 
-// GLOBAL APP CONTROLLER
-function setupEventListeners() {
-  var DOM = UICtrl.getDOMstrings();
-
-  document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
-
-  document.addEventListener('keypress', function(event) {
-    if (event.keyCode === 13 || event.which === 13) {
-      ctrlAddItem();
-    }
-  });
-
-  document
-    .querySelector(DOM.container)
-    .addEventListener('click', ctrlDeleteItem);
-
-  document
-    .querySelector(DOM.inputType)
-    .addEventListener('change', UICtrl.changedType);
-
-  // Event listener for the custom event listener speechRecognize
-  document.addEventListener('speechRecognize', speechReconHandler);
-}
-
 function updateBudget() {
   // 1. Calculate the budget
   budgetCtrl.calculateBudget();
 
   // 2. Return the budget
-  var budget = budgetCtrl.getBudget();
+  const budget = budgetCtrl.getBudget();
 
   // 3. Display the budget on the UI
   UICtrl.displayBudget(budget);
@@ -43,10 +19,19 @@ function updatePercentages() {
   budgetCtrl.calculatePercentages();
 
   // 2. Read percentages from the budget controller
-  var percentages = budgetCtrl.getPercentages();
+  const percentages = budgetCtrl.getPercentages();
 
   // 3. Update the UI with the new percentages
   UICtrl.displayPercentages(percentages);
+}
+
+/* 
+    saveDataToLS - Function created to call the localStorageController
+    to persist the data.
+*/
+function saveDataToLS() {
+  const data = budgetCtrl.getData();
+  localStorageCtrl.persistData(data);
 }
 
 function updateAndSaveData() {
@@ -68,7 +53,6 @@ function speechReconHandler(e) {
   let description;
   const { type, transcript } = e.detail;
 
-  console.log(transcript);
   if (type === 'inc') {
     description = transcript.slice(transcript.indexOf('income') + 1);
   } else if (type === 'exp') {
@@ -81,7 +65,7 @@ function speechReconHandler(e) {
 
   const value = parseInt(transcript[transcript.length - 1]);
 
-  if (isNaN(value)) {
+  if (Number.isNaN(value)) {
     UICtrl.fillInputValue(type, description);
     return;
   }
@@ -91,15 +75,6 @@ function speechReconHandler(e) {
   const newItem = budgetCtrl.addItem(type, description.join(' '), value);
   UICtrl.addListItem(newItem, type);
   updateAndSaveData();
-}
-
-/* 
-    saveDataToLS - Function created to call the localStorageController
-    to persist the data.
-*/
-function saveDataToLS() {
-  const data = budgetCtrl.getData();
-  localStorageCtrl.persistData(data);
 }
 
 /*
@@ -117,21 +92,23 @@ function loadDatafromLS() {
     });
   }
 
-  for (let key in data.allItems) {
-    addNewItem(key);
-  }
+  Object.keys(data.allItems).forEach(key => addNewItem(key));
 
   updateBudget();
-  // updatePercentages();
+  updatePercentages();
 }
 
 function ctrlAddItem() {
-  var input, newItem;
+  let newItem;
 
   // 1. Get the field input data
-  input = UICtrl.getInput();
+  const input = UICtrl.getInput();
 
-  if (input.description !== '' && !isNaN(input.value) && input.value > 0) {
+  if (
+    input.description !== '' &&
+    !Number.isNaN(input.value) &&
+    input.value > 0
+  ) {
     // 2. Add the item to the budget controller
     newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
@@ -147,24 +124,28 @@ function ctrlAddItem() {
 }
 
 function ctrlDeleteItem(event) {
-  var itemID, splitID, type, ID;
+  let itemID;
+  let type;
+  let ID;
 
   /*
-            Fix for work in FireFox
-    */
+    Fix for work in FireFox
+  */
   function findParent(el, className) {
-    while ((el = el.parentElement) && !el.classList.contains(className));
-    return el;
+    let currentEl = el.parentElement;
+    while (!currentEl.classList.contains(className)) {
+      currentEl = currentEl.parentElement;
+    }
+    return currentEl;
   }
 
-  let itemDelete = findParent(event.target, 'item__delete');
+  const itemDelete = findParent(event.target, 'item__delete');
   if (itemDelete) itemID = itemDelete.parentNode.parentNode.id;
 
   if (itemID) {
-    //inc-1
-    splitID = itemID.split('-');
-    type = splitID[0];
-    ID = parseInt(splitID[1]);
+    // inc-1
+    [type, ID] = itemID.split('-');
+    ID = parseInt(ID);
 
     // 1. delete the item from the data structure
     budgetCtrl.deleteItem(type, ID);
@@ -175,6 +156,30 @@ function ctrlDeleteItem(event) {
     // 3. Update and save data
     updateAndSaveData();
   }
+}
+
+// GLOBAL APP CONTROLLER
+function setupEventListeners() {
+  const DOM = UICtrl.getDOMstrings();
+
+  document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
+
+  document.addEventListener('keypress', event => {
+    if (event.keyCode === 13 || event.which === 13) {
+      ctrlAddItem();
+    }
+  });
+
+  document
+    .querySelector(DOM.container)
+    .addEventListener('click', ctrlDeleteItem);
+
+  document
+    .querySelector(DOM.inputType)
+    .addEventListener('change', UICtrl.changedType);
+
+  // Event listener for the custom event listener speechRecognize
+  document.addEventListener('speechRecognize', speechReconHandler);
 }
 
 export default function init() {

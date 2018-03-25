@@ -1,0 +1,15 @@
+{
+  /* Editor configuration */
+  "[javascript]": {
+    "editor.formatOnSave": false
+  },
+  "editor.formatOnSave": true,
+  "editor.renderWhitespace": "all",
+  "files.insertFinalNewline": true,
+  /* ESLint configuration */
+  "eslint.autoFixOnSave": true,
+  "eslint.alwaysShowStatus": true,
+
+  /* Prettier configuration */
+  "prettier.disableLanguages": ["js"]
+}

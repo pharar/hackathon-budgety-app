@@ -2,23 +2,6 @@
     SpeechRecognitionController
 */
 
-export default function initSpeechRecognitionCtrl() {
-  try {
-    window.SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-  } catch (e) {
-    console.log(`Speech Recognition not supported: ${e}`);
-  }
-
-  const recognition = new SpeechRecognition();
-  recognition.interimResults = true;
-
-  recognition.addEventListener('result', recognizeCmds);
-  recognition.addEventListener('end', recognition.start);
-
-  recognition.start();
-}
-
 function custemEventHandler(type, transcript) {
   const event = new CustomEvent('speechRecognize', {
     detail: {
@@ -42,4 +25,21 @@ function recognizeCmds(e) {
       custemEventHandler('exp', transcript);
     }
   }
+}
+
+export default function initSpeechRecognitionCtrl() {
+  try {
+    window.SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+  } catch (e) {
+    console.log(`Speech Recognition not supported: ${e}`);
+  }
+
+  const recognition = new window.SpeechRecognition();
+  recognition.interimResults = true;
+
+  recognition.addEventListener('result', recognizeCmds);
+  recognition.addEventListener('end', recognition.start);
+
+  recognition.start();
 }

@@ -6,6 +6,7 @@ COPY package*.json ./
 
 RUN npm install -g nodemon
 RUN npm install -g parcel-bundler
+RUN npm install -g concurrently
 RUN npm install --quiet --no-optional
 
 COPY . .

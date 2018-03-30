@@ -12,17 +12,15 @@ services:
       - node_modules:/usr/local/node_modules
     ports:
       - '3000'
-      - '4587'
+      - '4587:4587'
     links:
       - mongodb
     networks:
-      - web
       - default
     labels:
       - "traefik.backend=budgetapp.localhost"
       - "traefik.docker.network=default"
-      - "traefik.frontend.entryPoints=http,ws"
-      - "traefik.ws.protocol=http"
+      - "traefik.frontend.entryPoints=http"
       - "traefik.frontend.rule=Host:budgetapp.localhost"
       - "traefik.enable=true"
       - "traefik.port=3000"
@@ -35,11 +33,13 @@ services:
       - mongodb_data:/data/db
     ports:
       - "27017:27017"
+    labels:
+     - "traefik.backend=mongodb.localhost"
+     - "traefik.docker.network=default"
   reverse-proxy:
     image: traefik
     command: --api --docker
     networks:
-      - web
       - default
     ports:
       - "80:80"
@@ -50,7 +50,3 @@ services:
 volumes:
   node_modules:
   mongodb_data:
-
-networks:
-  web:
-    external: true

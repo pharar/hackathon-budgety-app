@@ -22,7 +22,7 @@
 # Optional
 # Default: ["http"]
 #
-defaultEntryPoints = ["http", "ws"]
+defaultEntryPoints = ["http"]
 
 [web]
 address = ":8080"

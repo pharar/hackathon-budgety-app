@@ -1,7 +1,7 @@
 import * as budgetCtrl from './BudgetController';
 import * as UICtrl from './UIController';
 import * as localStorageCtrl from './LocalStorage';
-import initSpeechRecognitionCtrl from './SpeechRecognition';
+// import initSpeechRecognitionCtrl from './SpeechRecognition';
 
 function updateBudget() {
   // 1. Calculate the budget
@@ -193,5 +193,5 @@ export default function init() {
   });
   loadDatafromLS();
   setupEventListeners();
-  initSpeechRecognitionCtrl();
+  // initSpeechRecognitionCtrl();
 }

@@ -1,0 +1,56 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+    image: budget-app
+    command: npm run dev:start
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - .:/usr/local/app
+      - node_modules:/usr/local/node_modules
+    ports:
+      - '3000'
+      - '4587'
+    links:
+      - mongodb
+    networks:
+      - web
+      - default
+    labels:
+      - "traefik.backend=budgetapp.localhost"
+      - "traefik.docker.network=default"
+      - "traefik.frontend.entryPoints=http,ws"
+      - "traefik.ws.protocol=http"
+      - "traefik.frontend.rule=Host:budgetapp.localhost"
+      - "traefik.enable=true"
+      - "traefik.port=3000"
+      - "traefik.default.protocol=http"
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo:3.6.3-jessie
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+  reverse-proxy:
+    image: traefik
+    command: --api --docker
+    networks:
+      - web
+      - default
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  node_modules:
+  mongodb_data:
+
+networks:
+  web:
+    external: true

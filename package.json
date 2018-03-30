@@ -11,7 +11,7 @@
     "dev:down": "docker-compose down",
     "test": "echo \"Error: no test specified\" && exit 1",
     "precommit": "lint-staged",
-    "parcel:watch": "parcel src/index.html --out-dir public/ --hmr-port 4587",
+    "parcel:watch": "parcel src/index.html --out-dir public/ --hmr-port 80",
     "parcel:build": "parcel build src/index.html --out-dir dist/"
   },
   "lint-staged": {

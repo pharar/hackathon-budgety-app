@@ -1,5 +1,5 @@
 /*
- Local Storage Controller
+* Local Storage Controller
 */
 // Function to persist the data from Budget Controller
 export function persistData(data) {

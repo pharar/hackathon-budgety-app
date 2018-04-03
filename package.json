@@ -9,7 +9,7 @@
     "dev:start": "concurrently \"npm run watch\" \"npm run parcel:watch\" --names \"NODEMON 💻,PARCEL 📦 \" --prefix name",
     "dev:up": "docker-compose up",
     "dev:down": "docker-compose down",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "",
     "precommit": "lint-staged",
     "parcel:watch": "parcel src/index.html --out-dir public/ --hmr-port 4587",
     "parcel:build": "parcel build src/index.html --out-dir dist/"

@@ -1,5 +1,9 @@
-// UI CONTROLLER
-var DOMstrings = {
+/**
+ * UI CONTROLLER
+ */
+
+// Keys to connect with the DOM.
+const DOMstrings = {
   inputType: '.add__type',
   inputDescription: '.add__description',
   inputValue: '.add__value',
@@ -15,34 +19,29 @@ var DOMstrings = {
   dateLabel: '.budget__title--month',
 };
 
-function formatNumber(num, type) {
-  var numSplit, int, dec, type;
-  /*
-            + or - before number
-            exactly 2 decimal points
-            comma separating the thousands
+// Utility for the DOM.
+// Method to prettify the format of the numbers.
+function formatNumber(number, type) {
+  const num = Math.abs(number).toFixed(2);
+  // num = num.toFixed(2);
 
-            2310.4567 -> + 2,310.46
-            2000 -> + 2,000.00
-            */
+  const numSplit = num.split('.');
 
-  num = Math.abs(num);
-  num = num.toFixed(2);
+  let int = numSplit[0];
 
-  numSplit = num.split('.');
-
-  int = numSplit[0];
   if (int.length > 3) {
-    int = int.substr(0, int.length - 3) + ',' + int.substr(int.length - 3, 3); //input 23510, output 23,510
+    int = `${int.substr(0, int.length - 3)},${int.substr(int.length - 3, 3)}`; // input 23510, output 23,510
+    // int = int.substr(0, int.length - 3) + ',' + int.substr(int.length - 3, 3);
   }
 
-  dec = numSplit[1];
+  const dec = numSplit[1];
 
-  return (type === 'exp' ? '-' : '+') + ' ' + int + '.' + dec;
+  return `${type === 'exp' ? '-' : '+'} ${int}.${dec}`;
+  // (type === 'exp' ? '-' : '+') + ' ' + int + '.' + dec;
 }
 
 function nodeListForEach(list, callback) {
-  for (var i = 0; i < list.length; i++) {
+  for (let i = 0; i < list.length; i += 1) {
     callback(list[i], i);
   }
 }
@@ -55,9 +54,11 @@ export function getInput() {
   };
 }
 
+// Create HTML string with placeholder text
 export function addListItem(obj, type) {
-  var html, newHtml, element;
-  // Create HTML string with placeholder text
+  let html;
+  let newHtml;
+  let element;
 
   if (type === 'inc') {
     element = DOMstrings.incomeContainer;
@@ -81,29 +82,29 @@ export function addListItem(obj, type) {
 }
 
 export function deleteListItem(selectorID) {
-  var el = document.getElementById(selectorID);
+  const el = document.getElementById(selectorID);
   el.parentNode.removeChild(el);
 }
 
 export function clearFields() {
-  var fields, fieldsArr;
-
-  fields = document.querySelectorAll(
-    DOMstrings.inputDescription + ', ' + DOMstrings.inputValue,
+  const fields = document.querySelectorAll(
+    `${DOMstrings.inputDescription}, ${DOMstrings.inputValue}`,
   );
 
-  fieldsArr = Array.prototype.slice.call(fields);
+  const fieldsArr = Array.prototype.slice.call(fields);
 
-  fieldsArr.forEach(function(current, index, array) {
-    current.value = '';
+  fieldsArr.forEach(current => {
+    const cur = current;
+    cur.value = '';
   });
 
   fieldsArr[0].focus();
 }
 
 export function displayBudget(obj) {
-  var type;
-  obj.budget > 0 ? (type = 'inc') : (type = 'exp');
+  const type = obj.budget > 0 ? 'inc' : 'exp';
+
+  // obj.budget > 0 ? (type = 'inc') : (type = 'exp');
 
   document.querySelector(DOMstrings.budgetLabel).textContent = formatNumber(
     obj.budget,
@@ -119,32 +120,32 @@ export function displayBudget(obj) {
   );
 
   if (obj.percentage > 0) {
-    document.querySelector(DOMstrings.percentageLabel).textContent =
-      obj.percentage + '%';
+    document.querySelector(DOMstrings.percentageLabel).textContent = `${
+      obj.percentage
+    }%`;
   } else {
     document.querySelector(DOMstrings.percentageLabel).textContent = '---';
   }
 }
 
 export function displayPercentages(percentages) {
-  var fields = document.querySelectorAll(DOMstrings.expensesPercLabel);
+  const fields = document.querySelectorAll(DOMstrings.expensesPercLabel);
 
-  nodeListForEach(fields, function(current, index) {
+  nodeListForEach(fields, (current, index) => {
+    const cur = current;
     if (percentages[index] > 0) {
-      current.textContent = percentages[index] + '%';
+      cur.textContent = `${percentages[index]}%`;
     } else {
-      current.textContent = '---';
+      cur.textContent = '---';
     }
   });
 }
 
 export function displayMonth() {
-  var now, months, month, year;
+  const now = new Date();
+  // var christmas = new Date(2016, 11, 25);
 
-  now = new Date();
-  //var christmas = new Date(2016, 11, 25);
-
-  months = [
+  const months = [
     'January',
     'February',
     'March',
@@ -158,23 +159,24 @@ export function displayMonth() {
     'November',
     'December',
   ];
-  month = now.getMonth();
 
-  year = now.getFullYear();
-  document.querySelector(DOMstrings.dateLabel).textContent =
-    months[month] + ' ' + year;
+  const month = now.getMonth();
+
+  const year = now.getFullYear();
+
+  document.querySelector(DOMstrings.dateLabel).textContent = `${
+    months[month]
+  } ${year}`;
 }
 
 export function changedType() {
-  var fields = document.querySelectorAll(
-    DOMstrings.inputType +
-      ',' +
-      DOMstrings.inputDescription +
-      ',' +
-      DOMstrings.inputValue,
+  const fields = document.querySelectorAll(
+    `${DOMstrings.inputType},${DOMstrings.inputDescription},${
+      DOMstrings.inputValue
+    }`,
   );
 
-  nodeListForEach(fields, function(cur) {
+  nodeListForEach(fields, cur => {
     cur.classList.toggle('red-focus');
   });
 

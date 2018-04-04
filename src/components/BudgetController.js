@@ -1,6 +1,6 @@
 // BUDGET CONTROLLER
 
-var data = {
+const data = {
   allItems: {
     exp: [],
     inc: [],
@@ -13,45 +13,46 @@ var data = {
   percentage: -1,
 };
 
-function Expense(id, description, value) {
-  this.id = id;
-  this.description = description;
-  this.value = value;
-  this.percentage = -1;
-}
-
-Expense.prototype.calcPercentage = function(totalIncome) {
-  if (totalIncome > 0) {
-    this.percentage = Math.round(this.value / totalIncome * 100);
-  } else {
+class Expense {
+  constructor(id, description, value) {
+    this.id = id;
+    this.description = description;
+    this.value = value;
     this.percentage = -1;
   }
-};
 
-Expense.prototype.getPercentage = function() {
-  return this.percentage;
-};
+  calcPercentage(totalIncome) {
+    if (totalIncome > 0) {
+      this.percentage = Math.round(this.value / totalIncome * 100);
+    } else {
+      this.percentage = -1;
+    }
+  }
 
-function Income(id, description, value) {
-  this.id = id;
-  this.description = description;
-  this.value = value;
+  getPercentage() {
+    return this.percentage;
+  }
+}
+
+class Income {
+  constructor(id, description, value) {
+    this.id = id;
+    this.description = description;
+    this.value = value;
+  }
 }
 
 function calculateTotal(type) {
-  var sum = 0;
-  data.allItems[type].forEach(function(cur) {
+  let sum = 0;
+  data.allItems[type].forEach(cur => {
     sum += cur.value;
   });
   data.totals[type] = sum;
 }
 
 export function addItem(type, des, val) {
-  var newItem, ID;
-
-  //[1 2 3 4 5], next ID = 6
-  //[1 2 4 6 8], next ID = 9
-  // ID = last ID + 1
+  let newItem;
+  let ID;
 
   // Create new ID
   if (data.allItems[type].length > 0) {
@@ -75,18 +76,9 @@ export function addItem(type, des, val) {
 }
 
 export function deleteItem(type, id) {
-  var ids, index;
+  const ids = data.allItems[type].map(current => current.id);
 
-  // id = 6
-  //data.allItems[type][id];
-  // ids = [1 2 4  8]
-  //index = 3
-
-  ids = data.allItems[type].map(function(current) {
-    return current.id;
-  });
-
-  index = ids.indexOf(id);
+  const index = ids.indexOf(id);
 
   if (index !== -1) {
     data.allItems[type].splice(index, 1);
@@ -112,25 +104,13 @@ export function calculateBudget() {
 }
 
 export function calculatePercentages() {
-  /*
-            a=20
-            b=10
-            c=40
-            income = 100
-            a=20/100=20%
-            b=10/100=10%
-            c=40/100=40%
-            */
-
-  data.allItems.exp.forEach(function(cur) {
+  data.allItems.exp.forEach(cur => {
     cur.calcPercentage(data.totals.inc);
   });
 }
 
 export function getPercentages() {
-  var allPerc = data.allItems.exp.map(function(cur) {
-    return cur.getPercentage();
-  });
+  const allPerc = data.allItems.exp.map(cur => cur.getPercentage());
   return allPerc;
 }
 

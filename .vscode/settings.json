@@ -11,5 +11,6 @@
   "eslint.alwaysShowStatus": true,
 
   /* Prettier configuration */
-  "prettier.disableLanguages": ["js"]
+  "prettier.disableLanguages": ["js"],
+  "editor.tabSize": 2
 }

@@ -11,17 +11,25 @@
     "dev:down": "docker-compose down",
     "test": "",
     "precommit": "lint-staged",
-    "parcel:watch": "parcel src/index.html --out-dir public/ --hmr-port 4587",
+    "parcel:watch": "parcel src/index.html -d public/ --hmr-port 4587",
     "parcel:build": "parcel build src/index.html --out-dir dist/"
   },
   "lint-staged": {
-    "src/**/*.js": ["eslint", "git add"]
+    "src/**/*.js": [
+      "eslint",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/20Heroes/hackathon-budgetapp.git"
   },
-  "keywords": ["Budget", "hackathon", "javascript", "node"],
+  "keywords": [
+    "Budget",
+    "hackathon",
+    "javascript",
+    "node"
+  ],
   "author": "Guilherme Scaldelai",
   "license": "ISC",
   "bugs": {
@@ -45,6 +53,7 @@
     "prettier": "^1.11.1"
   },
   "dependencies": {
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "mongoose": "^5.0.13"
   }
 }

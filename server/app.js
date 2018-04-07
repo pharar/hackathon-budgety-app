@@ -1,5 +1,11 @@
 const express = require('express');
 const path = require('path');
+const mongoose = require('mongoose');
+
+mongoose
+  .connect('mongodb://mongodb/budgetapp')
+  .then(() => console.log('MongoDB Connected'))
+  .catch(err => console.log(err));
 
 const app = express();
 

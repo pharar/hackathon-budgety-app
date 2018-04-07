@@ -30,6 +30,8 @@
 
 `git clone https://github.com/20Heroes/hackathon-budgety-app.git`
 
+`hackathon-budgety-app`
+
 `npm install`
 
 `npm run dev:up`

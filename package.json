@@ -1,35 +1,29 @@
 {
   "name": "budget-hackathon-pallet",
   "version": "1.0.0",
-  "description": "App for budget controller original from a Udemy course and used for hackathons",
-  "main": "server/app.js",
+  "description":
+    "App for budget controller original from a Udemy course and used for hackathons",
+  "main": "server/server.js",
   "scripts": {
     "watch": "nodemon --inspect=0.0.0.0 --ignore public/",
     "start": "node server/app.js",
-    "dev:start": "concurrently \"npm run watch\" \"npm run parcel:watch\" --names \"NODEMON 💻,PARCEL 📦 \" --prefix name",
+    "dev:start":
+      "concurrently \"npm run watch\" \"npm run parcel:watch\" --names \"NODEMON 💻,PARCEL 📦 \" --prefix name",
     "dev:up": "docker-compose up",
     "dev:down": "docker-compose down",
-    "test": "",
+    "test": "jest --coverage",
     "precommit": "lint-staged",
     "parcel:watch": "parcel src/index.html -d public/ --hmr-port 4587",
     "parcel:build": "parcel build src/index.html --out-dir dist/"
   },
   "lint-staged": {
-    "src/**/*.js": [
-      "eslint",
-      "git add"
-    ]
+    "src/**/*.js": ["eslint", "git add"]
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/20Heroes/hackathon-budgetapp.git"
   },
-  "keywords": [
-    "Budget",
-    "hackathon",
-    "javascript",
-    "node"
-  ],
+  "keywords": ["Budget", "hackathon", "javascript", "node"],
   "author": "Guilherme Scaldelai",
   "license": "ISC",
   "bugs": {
@@ -54,6 +48,7 @@
   },
   "dependencies": {
     "express": "^4.16.3",
-    "mongoose": "^5.0.13"
+    "mongoose": "^5.0.13",
+    "supertest": "^3.0.0"
   }
 }

@@ -1,4 +1,4 @@
-#install docker
+# install docker
 
 `sudo apt-get remove docker docker-engine docker-ce docker.io`
 
@@ -18,15 +18,15 @@
 
 `sudo usermod -aG docker $USER`
 
-#install docker-compose
+# install docker-compose
 
 `sudo curl -L https://github.com/docker/compose/releases/download/1.20.1/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose`
 
 `sudo chmod +x /usr/local/bin/docker-compose`
 
-#log out & log in!
+# log out & log in!
 
-#download the project
+# download the project
 
 `git clone https://github.com/20Heroes/hackathon-budgety-app.git`
 
@@ -34,7 +34,7 @@
 
 `npm run dev:up`
 
-#visual studio code extension
+# visual studio code extension
 
 install ESLint extension
 

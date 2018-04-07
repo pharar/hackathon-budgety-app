@@ -1,15 +1,13 @@
 version: '3'
 services:
   app:
-    build:
-      context: .
-    image: budget-app
+    image: node:9.9.0
     command: npm run dev:start
     environment:
       - NODE_ENV=development
+    working_dir: '/usr/local/app'
     volumes:
       - .:/usr/local/app
-      - node_modules:/usr/local/node_modules
     ports:
       - '3000:3000'
       - '4587:4587'
@@ -27,5 +25,4 @@ services:
       - "27017:27017"
 
 volumes:
-  node_modules:
   mongodb_data:

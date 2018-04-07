@@ -12,4 +12,8 @@ const app = express();
 app.use(express.static(path.join(__dirname, '../public')));
 app.use('/public', express.static('public'));
 
+app.get('/test', (req, res) => {
+  res.send('It worked');
+});
+
 module.exports = app;

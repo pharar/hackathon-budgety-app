@@ -1,0 +1,31 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+    image: budget-app
+    command: npm run dev:start
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - .:/usr/local/app
+      - node_modules:/usr/local/node_modules
+    ports:
+      - '3000:3000'
+      - '4587:4587'
+    links:
+      - mongodb
+    networks:
+      - default
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo:3.6.3-jessie
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+
+volumes:
+  node_modules:
+  mongodb_data:

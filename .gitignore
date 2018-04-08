@@ -3,5 +3,3 @@ node_modules/
 public/
 .cache/
 dist/
-.vscode/
-*.test.js

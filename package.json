@@ -4,7 +4,7 @@
   "description": "App for budget controller original from a Udemy course and used for hackathons",
   "main": "server/app.js",
   "scripts": {
-    "watch": "nodemon --ignore public/",
+    "watch": "nodemon --inspect=0.0.0.0 --ignore public/",
     "start": "node server/app.js",
     "dev:start": "concurrently \"npm run watch\" \"npm run parcel:watch\" --names \"NODEMON 💻,PARCEL 📦 \" --prefix name",
     "dev:up": "docker-compose up",

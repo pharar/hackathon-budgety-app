@@ -11,6 +11,7 @@ services:
     ports:
       - '3000:3000'
       - '4587:4587'
+      - '9229:9229'
     links:
       - mongodb
     networks:

@@ -1,3 +1,5 @@
+# Budget APP - [![Build Status](https://travis-ci.org/20Heroes/hackathon-budgety-app.svg?branch=testing)](https://travis-ci.org/20Heroes/hackathon-budgety-app)
+
 # install docker
 
 `sudo apt-get remove docker docker-engine docker-ce docker.io`

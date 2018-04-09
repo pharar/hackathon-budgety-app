@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs');
 
 // User Model
 const UserSchema = new mongoose.Schema({
-  nameUser: {
+  userName: {
     type: String,
     required: true,
     minlength: 1,
@@ -45,7 +45,7 @@ UserSchema.methods.generateAuthToken = function generateAuthToken() {
   const user = this;
   const access = 'auth';
   const token = jwt
-    .sign({ _id: user._id.toHexString(), access }, process.env.JWT_SECRET)
+    .sign({ _id: user._id.toHexString(), access }, 'pojiaj234oi234oij234oij4')
     .toString();
 
   user.tokens = user.tokens.concat([{ access, token }]);
@@ -71,13 +71,15 @@ UserSchema.statics.findByToken = function findByToken(token) {
 };
 
 UserSchema.statics.findByCredentials = function findByCredentials(
-  nameUser,
+  userName,
   password,
 ) {
   const User = this;
 
-  return User.findOne({ nameUser }).then(user => {
+  return User.findOne({ userName }).then(user => {
+    console.log(user);
     if (!user) {
+      console.log('No found user.');
       return Promise.reject();
     }
 
@@ -86,12 +88,31 @@ UserSchema.statics.findByCredentials = function findByCredentials(
         if (res) {
           resolve(user);
         } else {
+          console.log('Fallo pass.');
           reject();
         }
       });
     });
   });
 };
+
+UserSchema.pre('save', function save(next) {
+  const user = this;
+
+  if (user.isModified('password')) {
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(user.password, salt, (err, hash) => {
+        if (err) {
+          console.log(err);
+        }
+        user.password = hash;
+        next();
+      });
+    });
+  } else {
+    next();
+  }
+});
 
 const User = mongoose.model('User', UserSchema);
 

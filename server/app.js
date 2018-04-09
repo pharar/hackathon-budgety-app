@@ -4,19 +4,19 @@ const { User } = require('./../server/models/users');
 const bodyParser = require('body-parser');
 const _ = require('lodash');
 const authenticate = require('./middleware/authenticate');
-// const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-/* mongoose
+mongoose
   .connect('mongodb://mongodb/budgetapp')
   .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.log(err)); */
+  .catch(err => console.log(err));
 
 const app = express();
 
 app.use(express.static(path.join(__dirname, '../public')));
 app.use('/public', express.static('public'));
 
-app.get('/test', authenticate, (req, res) => {
+app.get('/test', (req, res) => {
   res.send('It worked');
 });
 
@@ -29,12 +29,15 @@ app.use(bodyParser.json());
 app.post('/login', (req, res) => {
   const body = _.pick(req.body, ['userName', 'password']);
 
+  console.log(body);
   User.findByCredentials(body.userName, body.password)
-    .then(user =>
+    .then(user => {
+      console.log(user);
       user.generateAuthToken().then(token => {
         res.header('x-auth', token).send(user);
-      }),
-    )
+        console.log(token);
+      });
+    })
     .catch(() => {
       res.status(400).send();
     });
@@ -42,7 +45,7 @@ app.post('/login', (req, res) => {
 
 // Create new user, how or where need it?
 app.post('/users', (req, res) => {
-  const body = _.pick(req.body, ['nameUser', 'password']);
+  const body = _.pick(req.body, ['userName', 'password']);
   const user = new User(body);
 
   user

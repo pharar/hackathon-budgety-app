@@ -33,7 +33,7 @@ const UserSchema = new mongoose.Schema({
   ],
 });
 
-UserSchema.methods.toJSON = function() {
+UserSchema.methods.toJSON = function toJSON() {
   const user = this;
   const userObject = user.toObject();
 
@@ -41,7 +41,7 @@ UserSchema.methods.toJSON = function() {
 };
 
 // Token Generator
-UserSchema.methods.generateAuthToken = function() {
+UserSchema.methods.generateAuthToken = function generateAuthToken() {
   const user = this;
   const access = 'auth';
   const token = jwt
@@ -53,9 +53,9 @@ UserSchema.methods.generateAuthToken = function() {
 };
 
 // Method to search Token
-UserSchema.statics.findByToken = function(token) {
+UserSchema.statics.findByToken = function findByToken(token) {
   const User = this;
-  const decoded = undefined;
+  let decoded;
 
   try {
     decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -70,7 +70,10 @@ UserSchema.statics.findByToken = function(token) {
   });
 };
 
-UserSchema.statics.findByCredentials = function(nameUser, password) {
+UserSchema.statics.findByCredentials = function findByCredentials(
+  nameUser,
+  password,
+) {
   const User = this;
 
   return User.findOne({ nameUser }).then(user => {

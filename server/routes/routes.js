@@ -12,4 +12,7 @@ router.get('/', budgetController.index);
 router.get('/login', authController.loginForm);
 router.post('/login', authController.login);
 
+// Budget CRUD
+router.post('/add', budgetController.add);
+
 module.exports = router;

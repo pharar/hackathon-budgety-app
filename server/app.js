@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const hbs = require('express-handlebars');
+const bodyParser = require('body-parser');
 
 mongoose
   .connect('mongodb://mongodb/budgetapp')
@@ -10,11 +11,15 @@ mongoose
 
 // Loading Models
 require('./models/User');
+require('./models/movement');
 
 // Loading routes
 const routes = require('./routes/routes');
 
 const app = express();
+
+// Load bodyParser middleware
+app.use(bodyParser({ extend: true }));
 
 app.use(express.static(path.join(__dirname, '../public')));
 app.use('/public', express.static('public'));

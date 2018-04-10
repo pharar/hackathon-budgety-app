@@ -11,7 +11,7 @@ mongoose
 
 // Loading Models
 require('./models/User');
-require('./models/movement');
+require('./models/Movement');
 
 // Loading routes
 const routes = require('./routes/routes');

@@ -8,10 +8,6 @@ exports.index = (req, res) => {
 
 // Post movements
 exports.add = (req, res) => {
-  console.log('Hola, mundo');
-  console.log(req.body.type);
-  console.log(req.body.description);
-  console.log(req.body.value);
   const movement = new Movement({
     type: req.body.type,
     description: req.body.description,
@@ -26,4 +22,26 @@ exports.add = (req, res) => {
       res.status(400).send(e);
     },
   );
+};
+
+// delete movements
+exports.delete = (req, res) => {
+  Movement.findOneAndRemove({ _id: req.params.id })
+    .then(() => {
+      res.json({ status: 'removed' });
+    })
+    .catch(() => res.status(404).send('Not found'));
+};
+
+// find movements by type
+exports.findByType = (req, res) => {
+  Movement.find({ type: req.params.type })
+    .then(docs => {
+      if (!docs.length) {
+        res.status(404).send('Not found');
+        return;
+      }
+      res.send(docs);
+    })
+    .catch(() => res.status(404).send('Not found'));
 };

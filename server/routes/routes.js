@@ -14,5 +14,7 @@ router.post('/login', authController.login);
 
 // Budget CRUD
 router.post('/add', budgetController.add);
+router.post('/movements/:id/delete', budgetController.delete);
+router.get('/movements/:type', budgetController.findByType);
 
 module.exports = router;

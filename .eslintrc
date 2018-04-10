@@ -8,7 +8,9 @@
         "trailingComma": "all"
       }
     ],
-    "radix": 0
+    "radix": 0,
+    "no-unused-vars": ["error", { "argsIgnorePattern": "next" }],
+    "no-underscore-dangle": 0
   },
   "env": {
     "es6": true,

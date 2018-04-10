@@ -14,7 +14,7 @@ const DOMstrings = {
   incomeLabel: '.budget__income--value',
   expensesLabel: '.budget__expenses--value',
   percentageLabel: '.budget__expenses--percentage',
-  container: '.container',
+  container: '.container_list',
   expensesPercLabel: '.item__percentage',
   dateLabel: '.budget__title--month',
 };

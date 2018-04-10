@@ -3,7 +3,7 @@ const path = require('path');
 const { User } = require('./../server/models/users');
 const bodyParser = require('body-parser');
 const _ = require('lodash');
-const authenticate = require('./middleware/authenticate');
+// const authenticate = require('./middleware/authenticate');
 const mongoose = require('mongoose');
 
 mongoose
@@ -33,7 +33,7 @@ app.post('/login', (req, res) => {
   User.findByCredentials(body.userName, body.password)
     .then(user => {
       console.log(user);
-      user.generateAuthToken().then(token => {
+      return user.generateAuthToken().then(token => {
         res.header('x-auth', token).send(user);
         console.log(token);
       });
@@ -57,6 +57,24 @@ app.post('/users', (req, res) => {
     .catch(e => {
       res.status(400).send(e);
     });
+});
+
+// Verify user login
+/* app.get('/users/me', authenticate, (req, res) => {
+  res.send(req.user);
+}); */
+
+// Delete Token auth
+app.delete('/logout', (req, res) => {
+  console.log(req.user);
+  req.user.removeToken(req.token).then(
+    () => {
+      res.status(200).send();
+    },
+    () => {
+      res.status(400).send();
+    },
+  );
 });
 
 module.exports = app;

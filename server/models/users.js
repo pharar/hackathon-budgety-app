@@ -52,13 +52,23 @@ UserSchema.methods.generateAuthToken = function generateAuthToken() {
   return user.save().then(() => token);
 };
 
+UserSchema.methods.removeToken = function removeToken(token) {
+  const user = this;
+
+  return user.update({
+    $pull: {
+      tokens: { token },
+    },
+  });
+};
+
 // Method to search Token
 UserSchema.statics.findByToken = function findByToken(token) {
   const User = this;
   let decoded;
 
   try {
-    decoded = jwt.verify(token, process.env.JWT_SECRET);
+    decoded = jwt.verify(token, 'pojiaj234oi234oij234oij4');
   } catch (e) {
     return Promise.reject();
   }
@@ -77,9 +87,7 @@ UserSchema.statics.findByCredentials = function findByCredentials(
   const User = this;
 
   return User.findOne({ userName }).then(user => {
-    console.log(user);
     if (!user) {
-      console.log('No found user.');
       return Promise.reject();
     }
 
@@ -88,7 +96,6 @@ UserSchema.statics.findByCredentials = function findByCredentials(
         if (res) {
           resolve(user);
         } else {
-          console.log('Fallo pass.');
           reject();
         }
       });

@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const hbs = require('express-handlebars');
+const bodyParser = require('body-parser');
 
 mongoose
   .connect('mongodb://mongodb/budgetapp')
@@ -15,6 +16,9 @@ require('./models/User');
 const routes = require('./routes/routes');
 
 const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 
 app.use(express.static(path.join(__dirname, '../public')));
 app.use('/public', express.static('public'));

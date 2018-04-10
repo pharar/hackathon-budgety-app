@@ -53,10 +53,13 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.2",
     "express": "^4.16.3",
     "express-handlebars": "^3.0.0",
     "jsonwebtoken": "^8.2.1",
+    "lodash": "^4.17.5",
     "mongoose": "^5.0.13",
+    "npm": "^5.8.0",
     "supertest": "^3.0.0"
   }
 }
